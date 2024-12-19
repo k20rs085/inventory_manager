@@ -1,1 +1,57 @@
-こんにちは！
+アプリ名：Funventory
+環境：
+    - フロント：React(TypeScript)
+    - バック：Express.js(Node.js)
+    - DB：MySQL
+
+環境：https://ramble.impl.co.jp/2588/
+api側で足りないライブラリをインストール
+    npm install mysql2
+    npm install cors
+
+
+
+
+
+-- ユーザテーブルの作成
+CREATE TABLE users (
+    id VARCHAR(32) PRIMARY KEY, -- ユーザが自由に設定する文字列型のID
+    name VARCHAR(32) NOT NULL,
+    create_at DATE NOT NULL
+);
+
+-- シリーズテーブルの作成
+CREATE TABLE series (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(64) NOT NULL,
+    CONSTRAINT unique_series_name UNIQUE (name) -- ユニーク制約を追加
+);
+
+-- 著者テーブルの作成
+CREATE TABLE authors (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(64) NOT NULL,
+    CONSTRAINT unique_author_name UNIQUE (name) -- ユニーク制約を追加
+);
+
+-- カテゴリテーブルの作成
+CREATE TABLE categories (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(32) NOT NULL,
+    CONSTRAINT unique_category_name UNIQUE (name) -- ユニーク制約を追加
+);
+
+-- 在庫テーブルの作成
+CREATE TABLE inventory (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(64) NOT NULL,
+    series_id INTEGER,
+    author_id INTEGER,
+    category_id INTEGER,
+    owner_id VARCHAR(32),
+    FOREIGN KEY (series_id) REFERENCES series(id) ON DELETE SET NULL,
+    FOREIGN KEY (author_id) REFERENCES authors(id) ON DELETE SET NULL,
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL;
+    FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE,
+);
+
