@@ -1,0 +1,49 @@
+body {
+    width: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  .table_box {
+    margin: 20px auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 90%; /* 全体の幅を90%にして左右に余白を作る */
+    max-width: 800px; /* テーブルの最大幅を800pxに制限 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+  }
+  
+  .table_box th {
+    text-align: center;
+    color: white;
+    background: linear-gradient(#86ace2, #0065f4);
+    padding: 10px 0;
+    font-size: 1rem;
+  }
+  
+  .table_box td {
+    text-align: left;
+    border-left: 1px solid #c3c3c3;
+    border-bottom: 1px solid #c3c3c3;
+    padding: 12px 5px;
+    font-size: 0.9rem;
+    word-wrap: break-word;
+  }
+  
+  .table_box td:last-child {
+    border-right: 1px solid #c3c3c3;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .table_box {
+      width: 95%; /* スマホサイズでは幅をさらに調整 */
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .table_box {
+      width: 90%; /* 狭い画面でもテーブルが切れないように対応 */
+    }
+  }
+  

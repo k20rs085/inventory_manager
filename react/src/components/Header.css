@@ -1,0 +1,17 @@
+/* 全体のヘッダーのスタイル */
+.app-header {
+  display: flex;
+  align-items: center; /* 垂直方向に中央揃え */
+  justify-content: center; /* 横方向の位置決め (左寄せ) */
+  /* background-color: #282c34; ヘッダーの背景色 */
+  background-image: url(./img/header_logo.png);
+  padding: 20px;
+  color: rgb(0, 84, 80);
+}
+
+/* タイトル部分のスタイル */
+.app-title {
+  font-size: 2.5rem; /* タイトルの文字サイズ */
+  font-weight: bold; /* フォントを太字にする */
+  margin: 0; /* タイトルの上下の余白をなくす */
+}

@@ -1,0 +1,150 @@
+.image-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* オーバーレイ効果 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* 最前面に配置 */
+}
+
+.form-content {
+  background: #fff;
+  padding: 20px 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 400px; /* フォームの最大幅を指定 */
+}
+
+.form-content h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+label select,
+label input {
+  width: 100%; /* 幅を揃える */
+  padding: 8px; /* 内側の余白 */
+  margin-top: 5px; /* ラベルとの間隔 */
+  border: 1px solid #ccc; /* 枠線を統一 */
+  border-radius: 4px; /* 角を揃える */
+  font-size: 1rem; /* フォントサイズを揃える */
+  box-sizing: border-box; /* パディングを含む幅指定 */
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.form-buttons button {
+  width: 48%;
+  padding: 10px;
+  background: #007BFF;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.form-buttons button:hover {
+  background: #0056b3;
+}
+
+.form-buttons button[type="button"] {
+  background: #6c757d;
+}
+
+.form-buttons button[type="button"]:hover {
+  background: #5a6268;
+}
+
+.add-option {
+  display: flex; /* 要素を横並びに配置 */
+  align-items: center; /* 縦方向の中央揃え */
+  gap: 10px; /* 入力フィールドとボタンの間隔 */
+  margin-top: 5px; /* ラベルとの余白 */
+}
+
+.add-option input {
+  flex: 1; /* 入力フィールドを残りのスペースに広げる */
+}
+
+.add-option button {
+  flex: 0 0 auto; /* ボタンの幅を固定 */
+  width: 40px; /* ボタンの幅を固定 */
+  height: 40px; /* ボタンを正方形にする */
+  padding: 0; /* 内側余白をなくす */
+  display: flex; /* アイコンを中央揃え */
+  align-items: center; /* 縦方向中央揃え */
+  justify-content: center; /* 横方向中央揃え */
+  background: #28a745; /* ボタンの背景色 */
+  color: #fff; /* ボタンの文字色 */
+  border: none; /* 枠線を削除 */
+  border-radius: 20%; /* 角丸を設定 */
+  font-size: 1.5rem; /* アイコンのサイズを大きく */
+  cursor: pointer; /* カーソルをポインタに変更 */
+  transition: background 0.3s ease; /* ホバー時の背景色変更 */
+}
+
+.add-option button:hover {
+  background: #218838; /* ボタンホバー時の色変更 */
+}
+
+/* ----- レスポンシブ対応 ----- */
+
+/* スマホサイズ（最大幅: 768px） */
+@media (max-width: 768px) {
+  .form-content {
+    width: 95%; /* 画面幅の95%に収める */
+    padding: 15px 20px; /* 内側余白を調整 */
+  }
+
+  label {
+    margin-bottom: 12px; /* フォーム間隔を狭める */
+    font-size: 0.9rem; /* フォントを小さく */
+  }
+
+  label select,
+  label input {
+    padding: 6px; /* 入力欄の内側余白を縮小 */
+    font-size: 0.9rem; /* 入力文字を小さく */
+  }
+
+  .form-buttons button {
+    padding: 8px; /* ボタンの内側余白を縮小 */
+    font-size: 0.9rem; /* ボタンの文字サイズを調整 */
+  }
+
+  .form-buttons {
+    flex-direction: column; /* ボタンを縦並びに */
+    align-items: stretch;
+  }
+
+  .form-buttons button {
+    width: 100%; /* ボタン幅を100%に */
+    margin-bottom: 10px; /* ボタン間の余白を追加 */
+  }
+
+  .form-buttons button:last-child {
+    margin-bottom: 0; /* 最後のボタンの余白を削除 */
+  }
+
+  .add-option button {
+    padding: 0; /* ボタンの内側余白を調整 */
+    font-size: 1.5rem; /* ボタンの文字サイズを小さく */
+  }
+}
