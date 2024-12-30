@@ -7,6 +7,9 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var testRouter = require('./routes/test');
+var serRouter = require('./routes/series');
+var autRouter = require('./routes/authors');
+var catRouter = require('./routes/categories');
 
 var cors = require('cors');
 
@@ -27,6 +30,9 @@ app.use(cors()) // corsを有効に
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api/v1/test', testRouter);
+app.use('/api/v1/series', serRouter);
+app.use('/api/v1/authors', autRouter);
+app.use('/api/v1/categories', catRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

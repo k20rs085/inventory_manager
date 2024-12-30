@@ -22,7 +22,7 @@ con.connect((err) => {
 
 // 実際にデータを取得
 router.get('/', function(req, res, next) {
-    const sql = 'SELECT * FROM inventory'
+    const sql = 'SELECT * FROM authors'
     // con.query()でsql文を実行して結果をresultに格納する
     con.query(sql, (err, result) => {
         // エラーが発生した場合はエラーメッセージを返す

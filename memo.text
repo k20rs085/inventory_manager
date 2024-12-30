@@ -9,7 +9,8 @@ api側で足りないライブラリをインストール
     npm install mysql2
     npm install cors
 
-
+React側もインストール
+    npm install react-router-dom
 
 
 
