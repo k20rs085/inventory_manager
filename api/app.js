@@ -10,6 +10,7 @@ var testRouter = require('./routes/test');
 var serRouter = require('./routes/series');
 var autRouter = require('./routes/authors');
 var catRouter = require('./routes/categories');
+var addSeries = require('./routes/addSeries');
 
 var cors = require('cors');
 
@@ -33,6 +34,7 @@ app.use('/api/v1/test', testRouter);
 app.use('/api/v1/series', serRouter);
 app.use('/api/v1/authors', autRouter);
 app.use('/api/v1/categories', catRouter);
+app.use('/api/v1/addSeries', addSeries);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

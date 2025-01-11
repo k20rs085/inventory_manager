@@ -48,10 +48,27 @@ function FormOverlay({ onClose, onSubmit }) {
         onClose();
     };
 
-    const addNewSeries = () => {
-        if (newSeries && !seriesList.includes(newSeries)) {
-            setSeriesList([...seriesList, newSeries]);
-            setNewSeries('');
+    const addNewSeries = async () => {
+        if (newSeries && !seriesList.some(series => series.name === newSeries)) {
+            try {
+                const response = await fetch('http://localhost:3000/api/v1/addSeries', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ series: newSeries }),
+                });
+    
+                if (response.ok) {
+                    const addedSeries = await response.json();
+                    setSeriesList([...seriesList, { name: addedSeries.seriesName }]); // バックエンドから返却されたオブジェクトを追加
+                    setNewSeries('');
+                } else {
+                    console.error('新しいシリーズの追加に失敗しました');
+                }
+            } catch (error) {
+                console.error('新しいシリーズを追加中のエラー:', error);
+            }
         }
     };
 
