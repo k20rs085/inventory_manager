@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './Table.css';
+import AddInventoryButton from './AddInventoryButton';
 
-function Table() {
+function Table({newData}) {
     const [data, setData] = useState([]);
 
     useEffect(() => {
@@ -16,6 +17,16 @@ function Table() {
             .catch((error) => console.error('Error fetching data: ', error));
     }, []);
 
+    useEffect(() => {
+        // 新しいデータを追加
+        if (newData) {
+          setData((prevData) => [...prevData, newData]);
+        }
+    }, [newData]);
+
+    const test = (id) => {
+        console.log(id);
+    };
 
     return (
         <div>
@@ -23,15 +34,15 @@ function Table() {
                 <thead>
                 <tr>
                     <th>Item</th>
-                    <th>Cat</th>
+                    <th>Add</th>
                 </tr>
                 </thead>
                 <tbody>
                     { data.length > 0 ? (
                         data.map((item, index) => (
                             <tr key={index}>
-                                <td>{item.name}</td>
-                                <td>{item.category_id}</td>
+                                <td onClick={() => test(item.id)}>{item.name}</td>
+                                <td> <AddInventoryButton /> </td>
                             </tr>
                         ))
                     ) : (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './FormOverlay.css';
 
-function FormOverlay({ onClose, onSubmit }) {
+function FormOverlay({ onClose, onSubmit = () => {} }) {
     const [seriesList, setSeriesList] = useState([]);
     const [authorList, setAuthorList] = useState([]);
     const [categoryList, setCategoryList] = useState([]);
@@ -9,151 +9,187 @@ function FormOverlay({ onClose, onSubmit }) {
     const [newAuthor, setNewAuthor] = useState('');
     const [newCategory, setNewCategory] = useState('');
 
-    // バックエンドからシリーズ、作者、カテゴリを取得
+    // データの取得
     useEffect(() => {
         const fetchOptions = async () => {
             try {
-                const [seriesResponse, authorsResponse, categoriesResponse] = await Promise.all([
+                const [seriesRes, authorsRes, categoriesRes] = await Promise.allSettled([
                     fetch('http://localhost:3000/api/v1/series'),
                     fetch('http://localhost:3000/api/v1/authors'),
                     fetch('http://localhost:3000/api/v1/categories'),
                 ]);
 
-                if (!seriesResponse.ok || !authorsResponse.ok || !categoriesResponse.ok) {
-                    throw new Error('データ取得エラー');
+                if (seriesRes.status === "fulfilled") {
+                    setSeriesList(await seriesRes.value.json());
+                } else {
+                    console.error("シリーズ取得失敗:", seriesRes.reason);
                 }
 
-                setSeriesList(await seriesResponse.json());
-                setAuthorList(await authorsResponse.json());
-                setCategoryList(await categoriesResponse.json());
+                if (authorsRes.status === "fulfilled") {
+                    setAuthorList(await authorsRes.value.json());
+                } else {
+                    console.error("作者取得失敗:", authorsRes.reason);
+                }
+
+                if (categoriesRes.status === "fulfilled") {
+                    setCategoryList(await categoriesRes.value.json());
+                } else {
+                    console.error("カテゴリ取得失敗:", categoriesRes.reason);
+                }
             } catch (error) {
-                console.error('データ取得エラー:', error);
+                console.error('データ取得全体エラー:', error);
             }
         };
 
         fetchOptions();
     }, []);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
         const data = Object.fromEntries(formData.entries());
+        data.owner = 'marik@90148';
+        console.log('送信データ:', data);
 
-        // 新しい選択肢が追加された場合、それをフォームデータに含める
-        if (newSeries) data.series = newSeries;
-        if (newAuthor) data.author = newAuthor;
-        if (newCategory) data.category = newCategory;
+        try {
+            const response = await fetch('http://localhost:3000/api/v1/submitItem', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
 
-        onSubmit(data);
-        onClose();
-    };
-
-    const addNewSeries = async () => {
-        if (newSeries && !seriesList.some(series => series.name === newSeries)) {
-            try {
-                const response = await fetch('http://localhost:3000/api/v1/addSeries', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ series: newSeries }),
-                });
-    
-                if (response.ok) {
-                    const addedSeries = await response.json();
-                    setSeriesList([...seriesList, { name: addedSeries.seriesName }]); // バックエンドから返却されたオブジェクトを追加
-                    setNewSeries('');
-                } else {
-                    console.error('新しいシリーズの追加に失敗しました');
-                }
-            } catch (error) {
-                console.error('新しいシリーズを追加中のエラー:', error);
+            if (response.ok) {
+                const result = await response.json();
+                console.log('送信成功:', result);
+                const new_data = {
+                    id: result.inventoryId,  // result.messageをidに使用
+                    name: data.name,
+                    author_id: data.author,
+                    owner_id: data.owner,
+                    category_id: data.category
+                };
+                onSubmit(new_data); // 呼び出し元に通知
+                //onClose(); // モーダルを閉じる
+            } else {
+                console.error('送信失敗:', await response.text());
             }
+        } catch (error) {
+            console.error('送信中のエラー:', error);
         }
     };
 
-    const addNewAuthor = () => {
-        if (newAuthor && !authorList.includes(newAuthor)) {
-            setAuthorList([...authorList, newAuthor]);
-            setNewAuthor('');
+    const handleAddNewOption = async (type, value, setter, apiEndpoint, list) => {
+        if (!value || list.some(item => item.name === value)) {
+            return;
         }
-    };
 
-    const addNewCategory = () => {
-        if (newCategory && !categoryList.includes(newCategory)) {
-            setCategoryList([...categoryList, newCategory]);
-            setNewCategory('');
+        try {
+            const response = await fetch(`http://localhost:3000/api/v1/${apiEndpoint}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ [type]: value }),
+            });
+
+            if (response.ok) {
+                const newItem = await response.json();
+                setter((prev) => [...prev, { id: newItem[`${type}Id`], name: newItem[`${type}Name`] }]);
+            } else {
+                console.error(`${type}追加失敗`);
+            }
+        } catch (error) {
+            console.error(`${type}追加エラー:`, error);
         }
     };
 
     return (
         <div className="image-overlay">
             <form className="form-content" onSubmit={handleSubmit}>
-                <h2>Add Item</h2>
+                <h2>Add a new series</h2>
+
                 <label>
-                    名前:
+                    シリーズ名、作品名:
                     <input type="text" name="name" required />
                 </label>
+
+                {/********************
                 <label>
                     シリーズ:
                     <select name="series" required>
                         <option value="">選択してください</option>
-                        {seriesList.map((series, index) => (
-                            <option key={index} value={series.name}>
+                        {seriesList.map((series) => (
+                            <option key={series.id} value={series.id}>
                                 {series.name}
                             </option>
                         ))}
                     </select>
                     <div className="add-option">
                         <input
-                        type="text"
-                        placeholder="新しいシリーズを追加"
-                        value={newSeries}
-                        onChange={(e) => setNewSeries(e.target.value)}
+                            type="text"
+                            placeholder="新しいシリーズを追加"
+                            value={newSeries}
+                            onChange={(e) => setNewSeries(e.target.value)}
                         />
-                        <button type="button" onClick={addNewSeries}>+</button>
+                        <button
+                            type="button"
+                            onClick={() => handleAddNewOption('series', newSeries, setSeriesList, 'addSeries', seriesList)}
+                        >
+                            +
+                        </button>
                     </div>
                 </label>
+                ********************/}
                 <label>
                     作者:
                     <select name="author" required>
                         <option value="">選択してください</option>
-                        {authorList.map((author, index) => (
-                            <option key={index} value={author.name}>
+                        {authorList.map((author) => (
+                            <option key={author.id} value={author.id}>
                                 {author.name}
                             </option>
                         ))}
                     </select>
                     <div className="add-option">
                         <input
-                        type="text"
-                        placeholder="新しい作者を追加"
-                        value={newAuthor}
-                        onChange={(e) => setNewAuthor(e.target.value)}
+                            type="text"
+                            placeholder="新しい作者を追加"
+                            value={newAuthor}
+                            onChange={(e) => setNewAuthor(e.target.value)}
                         />
-                        <button type="button" onClick={addNewAuthor}>+</button>
+                        <button
+                            type="button"
+                            onClick={() => handleAddNewOption('author', newAuthor, setAuthorList, 'addAuthor', authorList)}
+                        >
+                            +
+                        </button>
                     </div>
                 </label>
+
                 <label>
                     カテゴリ:
                     <select name="category" required>
                         <option value="">選択してください</option>
-                        {categoryList.map((category, index) => (
-                            <option key={index} value={category.name}>
+                        {categoryList.map((category) => (
+                            <option key={category.id} value={category.id}>
                                 {category.name}
                             </option>
                         ))}
                     </select>
                     <div className="add-option">
                         <input
-                        type="text"
-                        placeholder="新しいカテゴリを追加"
-                        value={newCategory}
-                        onChange={(e) => setNewCategory(e.target.value)}
+                            type="text"
+                            placeholder="新しいカテゴリを追加"
+                            value={newCategory}
+                            onChange={(e) => setNewCategory(e.target.value)}
                         />
-                        <button type="button" onClick={addNewCategory}>+</button>
+                        <button
+                            type="button"
+                            onClick={() => handleAddNewOption('category', newCategory, setCategoryList, 'addCategory', categoryList)}
+                        >
+                            +
+                        </button>
                     </div>
                 </label>
+
                 <div className="form-buttons">
                     <button type="submit">送信</button>
                     <button type="button" onClick={onClose}>閉じる</button>

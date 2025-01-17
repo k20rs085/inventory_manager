@@ -5,8 +5,10 @@
   justify-content: center; /* 横方向の位置決め (左寄せ) */
   /* background-color: #282c34; ヘッダーの背景色 */
   background-image: url(./img/header_logo.png);
-  padding: 20px;
+  padding: 20px 0 20px 0;
   color: rgb(0, 84, 80);
+  background-size: cover; /* 背景画像を拡張してカバー */
+  background-position: center; /* 背景画像の位置を中央に */
 }
 
 /* タイトル部分のスタイル */

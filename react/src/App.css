@@ -36,3 +36,17 @@
     transform: rotate(360deg);
   }
 }
+
+.app-table-container {
+  padding-top: 80px; /* 上方向に余白を追加 */
+  padding-bottom: 80px;
+}
+
+.app-header-container {
+  position: fixed; /* ヘッダーを画面上部に固定 */
+  top: 0; /* 画面の上部に位置 */
+  left: 0; /* 左端に位置 */
+  width: 100%; /* 横幅を100%にする */
+  z-index: 10; /* 他の要素よりも前面に表示 */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* ヘッダーの影 */
+}
