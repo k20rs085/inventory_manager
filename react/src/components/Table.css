@@ -46,4 +46,15 @@ body {
       width: 90%; /* 狭い画面でもテーブルが切れないように対応 */
     }
   }
-  
+
+.nested-table {
+  margin: 1px 0;
+  width: 100%;
+  border: 1px solid #afafaf;
+  border-radius: 8px;
+}
+
+.nested-table th, .nested-table td {
+  padding: 5px;
+  border: 1px solid #afafaf;
+}

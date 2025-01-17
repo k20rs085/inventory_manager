@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './AddSeriesButton.css'; 
-import FormOverlay from './FormOverlay'; // 画像表示のコンポーネントをインポート
+import AddSeries from './AddSeries'; // 画像表示のコンポーネントをインポート
 
 function AddSeriesButton({ onSubmit }) {
   const [isImageVisible, setIsImageVisible] = useState(false);
@@ -21,7 +21,7 @@ function AddSeriesButton({ onSubmit }) {
 
       {/* フォームを表示 */}
       {isImageVisible && (
-        <FormOverlay onClose={closeImage} onSubmit={onSubmit} />
+        <AddSeries onClose={closeImage} onSubmit={onSubmit} />
       )}
     </div>
   );

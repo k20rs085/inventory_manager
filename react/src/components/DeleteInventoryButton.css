@@ -1,17 +1,17 @@
-.button04 {
+.button05 {
     display: flex;
     justify-content: center;  /* 横方向に中央揃え */
     align-items: center;      /* 縦方向に中央揃え */
     background-color: #fff;
-    border: double 3px #0047d6;
-    color: #0047d6;
+    border: double 3px #d60000;
+    color: #d60000;
     border-radius: 20px;
     padding: 0px 7px;
     text-decoration: none;
     font-size: 1.3em;
 }
 
-.button04:hover {
-    color: #0047d6;
-    background-color: #0047d630;
+.button05:hover {
+    color: #d60000;
+    background-color: #d6000030;
 }

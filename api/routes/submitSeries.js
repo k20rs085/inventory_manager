@@ -22,19 +22,19 @@ router.post('/', (req, res) => {
     console.log(req.body);
 
     // リクエストボディからデータを取得
-    const { name, author, category, owner } = req.body;
+    const { name, author, category } = req.body;
 
     // バリデーションチェック: 必須データがすべて存在しているか確認
-    if (!name || !author || !category || !owner) {
+    if (!name || !author || !category) {
         return res.status(400).json({ message: 'Invalid input: all fields are required' });
     }
 
     // `inventory` テーブルにデータをINSERT
     const sql = `
-        INSERT INTO series (name, author_id, category_id, owner_id) 
-        VALUES (?, ?, ?, ?)
+        INSERT INTO series (name, author_id, category_id) 
+        VALUES (?, ?, ?)
     `;
-    const values = [name, author, category, owner];
+    const values = [name, author, category];
 
     con.query(sql, values, (err, results) => {
         if (err) {

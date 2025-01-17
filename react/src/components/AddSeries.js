@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import './FormOverlay.css';
+import './AddSeries.css';
 
-function FormOverlay({ onClose, onSubmit = () => {} }) {
-    const [seriesList, setSeriesList] = useState([]);
+function AddSeries({ onClose, onSubmit = () => {} }) {
     const [authorList, setAuthorList] = useState([]);
     const [categoryList, setCategoryList] = useState([]);
-    const [newSeries, setNewSeries] = useState('');
     const [newAuthor, setNewAuthor] = useState('');
     const [newCategory, setNewCategory] = useState('');
 
@@ -13,17 +11,10 @@ function FormOverlay({ onClose, onSubmit = () => {} }) {
     useEffect(() => {
         const fetchOptions = async () => {
             try {
-                const [seriesRes, authorsRes, categoriesRes] = await Promise.allSettled([
-                    fetch('http://localhost:3000/api/v1/series'),
+                const [authorsRes, categoriesRes] = await Promise.allSettled([
                     fetch('http://localhost:3000/api/v1/authors'),
                     fetch('http://localhost:3000/api/v1/categories'),
                 ]);
-
-                if (seriesRes.status === "fulfilled") {
-                    setSeriesList(await seriesRes.value.json());
-                } else {
-                    console.error("シリーズ取得失敗:", seriesRes.reason);
-                }
 
                 if (authorsRes.status === "fulfilled") {
                     setAuthorList(await authorsRes.value.json());
@@ -48,11 +39,10 @@ function FormOverlay({ onClose, onSubmit = () => {} }) {
         event.preventDefault();
         const formData = new FormData(event.target);
         const data = Object.fromEntries(formData.entries());
-        data.owner = 'marik@90148';
         console.log('送信データ:', data);
 
         try {
-            const response = await fetch('http://localhost:3000/api/v1/submitItem', {
+            const response = await fetch('http://localhost:3000/api/v1/submitSeries', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data),
@@ -65,7 +55,6 @@ function FormOverlay({ onClose, onSubmit = () => {} }) {
                     id: result.inventoryId,  // result.messageをidに使用
                     name: data.name,
                     author_id: data.author,
-                    owner_id: data.owner,
                     category_id: data.category
                 };
                 onSubmit(new_data); // 呼び出し元に通知
@@ -139,7 +128,7 @@ function FormOverlay({ onClose, onSubmit = () => {} }) {
                 </label>
                 ********************/}
                 <label>
-                    作者:
+                    作者、アーティスト:
                     <select name="author" required>
                         <option value="">選択してください</option>
                         {authorList.map((author) => (
@@ -199,4 +188,4 @@ function FormOverlay({ onClose, onSubmit = () => {} }) {
     );
 }
 
-export default FormOverlay;
+export default AddSeries;
