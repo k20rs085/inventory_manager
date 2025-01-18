@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import './AddInventoryButton.css'; 
 import AddInventory from './AddInventory'; // 画像表示のコンポーネントをインポート
 
-function AddInventoryButton({ name, onSubmit }) {
+function AddInventoryButton({ data, onSubmit }) {
     const [isImageVisible, setIsImageVisible] = useState(false);
 
     // 画像を表示する関数
     const handleClick = () => {
         setIsImageVisible(true);
-        console.log(name);
     };
 
     // 画像を非表示にする関数
@@ -22,7 +21,7 @@ function AddInventoryButton({ name, onSubmit }) {
 
             {/* フォームを表示 */}
             {isImageVisible && (
-                <AddInventory onClose={closeImage} onSubmit={onSubmit} name={name} />
+                <AddInventory onClose={closeImage} onSubmit={onSubmit} data={data} />
             )}
         </div>
     );

@@ -21,10 +21,15 @@ con.connect((err) => {
 })
 
 // 実際にデータを取得
-router.get('/', function(req, res, next) {
-    const sql = 'SELECT * FROM series'
+router.post('/', function(req, res, next) {
+    console.log(req.body);
+    const sql = `
+        SELECT * FROM inventory 
+        WHERE series_id = ?
+    `;
+    const values = req.body.id;
     // con.query()でsql文を実行して結果をresultに格納する
-    con.query(sql, (err, result) => {
+    con.query(sql, values, (err, result) => {
         // エラーが発生した場合はエラーメッセージを返す
         if(err) {
             return res.status(400).json({"error": err.message})

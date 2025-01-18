@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './AddSeries.css';
 
 function AddSeries({ onClose, onSubmit = () => {} }) {
@@ -7,6 +7,7 @@ function AddSeries({ onClose, onSubmit = () => {} }) {
     const [newAuthor, setNewAuthor] = useState('');
     const [newCategory, setNewCategory] = useState('');
 
+    const formRef = useRef(null);
     // データの取得
     useEffect(() => {
         const fetchOptions = async () => {
@@ -58,6 +59,8 @@ function AddSeries({ onClose, onSubmit = () => {} }) {
                     category_id: data.category
                 };
                 onSubmit(new_data); // 呼び出し元に通知
+                
+                formRef.current.reset();
                 //onClose(); // モーダルを閉じる
             } else {
                 console.error('送信失敗:', await response.text());
@@ -92,7 +95,7 @@ function AddSeries({ onClose, onSubmit = () => {} }) {
 
     return (
         <div className="image-overlay">
-            <form className="form-content" onSubmit={handleSubmit}>
+            <form ref={formRef} className="form-content" onSubmit={handleSubmit}>
                 <h2>Add a new series</h2>
 
                 <label>

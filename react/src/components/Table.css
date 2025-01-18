@@ -48,6 +48,7 @@ body {
   }
 
 .nested-table {
+  background-color: #0066f40b;
   margin: 1px 0;
   width: 100%;
   border: 1px solid #afafaf;
@@ -57,4 +58,11 @@ body {
 .nested-table th, .nested-table td {
   padding: 5px;
   border: 1px solid #afafaf;
+}
+
+/* 2列目のデザイン調整 */
+.nested-table .delete-btn {
+  text-align: center;
+  white-space: nowrap; /* テキストを1行にする */
+  font-size: 0.9rem; /* フォントを小さくする */
 }

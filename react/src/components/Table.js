@@ -9,7 +9,7 @@ function Table({ newData }) {
     const [childData, setChildData] = useState({}); // 各行の追加データ
 
     useEffect(() => {
-        fetch('http://localhost:3000/api/v1/test')
+        fetch('http://localhost:3000/api/v1/series')
             .then((res) => {
                 if (!res.ok) {
                     throw new Error('Failed to fetch data');
@@ -26,11 +26,23 @@ function Table({ newData }) {
         }
     }, [newData]);
 
+    const handleAddInventory = (newData) => {
+        setChildData((prev) => {
+            const seriesData = prev[newData.series] || [];
+            return { ...prev, [newData.series]: [...seriesData, newData] };
+        });
+    };
+
     const toggleRow = async (id) => {
         setExpandedRows((prev) => ({ ...prev, [id]: !prev[id] }));
+        const data = {id};
         if (!childData[id]) {
             try {
-                const response = await fetch(`http://localhost:3000/api/v1/test`);
+                const response = await fetch('http://localhost:3000/api/v1/inventory', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                });
                 if (response.ok) {
                     const result = await response.json();
                     setChildData((prev) => ({ ...prev, [id]: result }));
@@ -60,22 +72,26 @@ function Table({ newData }) {
                                 <tr>
                                     <td onClick={() => toggleRow(item.id)}>{item.name}</td>
                                     <td>
-                                        <AddInventoryButton name={item.name} />
+                                        <AddInventoryButton data={{name: item.name, series: item.id }} onSubmit={handleAddInventory}/>
                                     </td>
                                     <td>
-                                        <DeleteInventoryButton name={item.name} />
+                                        <DeleteInventoryButton name={item.id} />
                                     </td>
                                 </tr>
                                 {expandedRows[item.id] && childData[item.id] && (
                                     <tr>
                                         <td colSpan="3">
                                             <table className="nested-table">
+                                            <colgroup>
+                                                <col style={{ width: '90%' }} />
+                                                <col style={{ width: '10%' }} />
+                                            </colgroup>
                                                 <tbody>
                                                     {childData[item.id].map((detail, detailIndex) => (
                                                         <tr key={detailIndex}>
                                                             <td>{detail.name}</td>
-                                                            <td>
-                                                                <DeleteInventoryButton name={item.id} />
+                                                            <td className='delete-btn'>
+                                                                <DeleteInventoryButton name={detail.id} />
                                                             </td>
                                                         </tr>
                                                     ))}
