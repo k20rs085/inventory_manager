@@ -9,7 +9,7 @@ function App() {
 
   // フォームからのデータ送信後に呼ばれる関数
   const handleFormSubmit = (new_data) => {
-    console.log('Appで受け取った送信データ:', new_data);
+    // console.log('Appで受け取った送信データ:', new_data);
     setSubmittedData(new_data); // 新しいデータを保存
   };
 

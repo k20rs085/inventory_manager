@@ -15,6 +15,7 @@ var addCategory = require('./routes/addCategory');
 var addAuthor = require('./routes/addAuthor');
 var submitSeries = require('./routes/submitSeries');
 var submitInventory = require('./routes/submitInventory');
+var deleteItem = require('./routes/deleteItem');
 
 var cors = require('cors');
 const { kMaxLength } = require('buffer');
@@ -44,6 +45,7 @@ app.use('/api/v1/addCategory', addCategory);
 app.use('/api/v1/addAuthor', addAuthor);
 app.use('/api/v1/submitSeries', submitSeries);
 app.use('/api/v1/submitInventory', submitInventory);
+app.use('/api/v1/deleteItem', deleteItem);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

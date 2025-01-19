@@ -11,7 +11,7 @@ function AddInventory({ data, onClose, onSubmit = () => {} }) {
         const data = Object.fromEntries(formData.entries());
         data.owner = 'marik@90148';
         data.series = series;
-        console.log('送信データ:', data);
+        // console.log('送信データ:', data);
 
         try {
             const response = await fetch('http://localhost:3000/api/v1/submitInventory', {
@@ -22,14 +22,14 @@ function AddInventory({ data, onClose, onSubmit = () => {} }) {
 
             if (response.ok) {
                 const result = await response.json();
-                console.log('送信成功:', result);
+                // console.log('送信成功:', result);
                 const new_data = {
                     id: result.id,  // result.messageをidに使用
                     name: data.name,
                     owner: data.owner,
                     series: data.series
                 };
-                console.log(new_data);
+                // console.log(new_data);
                 onSubmit(new_data); // 呼び出し元に通知
                 
                 formRef.current.reset();

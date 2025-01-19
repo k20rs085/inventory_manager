@@ -40,7 +40,7 @@ function AddSeries({ onClose, onSubmit = () => {} }) {
         event.preventDefault();
         const formData = new FormData(event.target);
         const data = Object.fromEntries(formData.entries());
-        console.log('送信データ:', data);
+        // console.log('送信データ:', data);
 
         try {
             const response = await fetch('http://localhost:3000/api/v1/submitSeries', {
@@ -51,12 +51,12 @@ function AddSeries({ onClose, onSubmit = () => {} }) {
 
             if (response.ok) {
                 const result = await response.json();
-                console.log('送信成功:', result);
+                // console.log('送信成功:', result);
                 const new_data = {
                     id: result.inventoryId,  // result.messageをidに使用
                     name: data.name,
                     author_id: data.author,
-                    category_id: data.category
+                    category_id: parseInt(data.category, 10)
                 };
                 onSubmit(new_data); // 呼び出し元に通知
                 
