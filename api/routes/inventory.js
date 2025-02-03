@@ -26,6 +26,7 @@ router.post('/', function(req, res, next) {
     const sql = `
         SELECT * FROM inventory 
         WHERE series_id = ?
+        ORDER BY name
     `;
     const values = req.body.id;
     // con.query()でsql文を実行して結果をresultに格納する
